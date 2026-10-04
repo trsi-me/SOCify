@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>الملف الشخصي - SOCify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="dashboard-body">
+    <!-- Navigation -->
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 100 100" width="32" height="32">
+                            <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" fill="none" stroke="#1565C0"
+                                stroke-width="3" />
+                            <circle cx="50" cy="50" r="15" fill="#00E5FF" />
+                            <circle cx="50" cy="50" r="8" fill="#1565C0" />
+                        </svg>
+                    </div>
+                    <span class="logo-text">SOCify</span>
+                </div>
+            </div>
+
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M3,13H11V3H3M3,21H11V15H3M13,21H21V11H13M13,3V9H21V3" fill="currentColor" />
+                    </svg>
+                    لوحة التحكم
+                </a>
+                <a href="/events" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"
+                            fill="currentColor" />
+                    </svg>
+                    الأحداث الأمنية
+                </a>
+                <a href="/rules" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+                            fill="currentColor" />
+                    </svg>
+                    إدارة القواعد
+                </a>
+                <a href="/lab" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M19.43,12.98C19.47,12.66 19.5,12.34 19.5,12C19.5,11.66 19.47,11.34 19.43,11.02L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11.02C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.98M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5Z"
+                            fill="currentColor" />
+                    </svg>
+                    المختبر
+                </a>
+                <a href="/profile" class="nav-link active">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                            fill="currentColor" />
+                    </svg>
+                    الملف الشخصي
+                </a>
+            </div>
+
+            <div class="nav-user">
+                <div class="user-info">
+                    <span class="user-name">{{ session.user_name }}</span>
+                    <span class="user-role">{{ session.user_role }}</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z"
+                            fill="currentColor" />
+                    </svg>
+                    تسجيل الخروج
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <div class="avatar-circle">
+                        <svg viewBox="0 0 24 24" width="48" height="48">
+                            <path
+                                d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                                fill="currentColor" />
+                        </svg>
+                    </div>
+                    <button class="avatar-upload" onclick="uploadAvatar()" title="رفع صورة شخصية">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z" fill="currentColor" />
+                        </svg>
+                    </button>
+                    <input type="file" id="avatar-input" accept="image/*" class="hidden-input" title="اختر صورة شخصية">
+                </div>
+                <div class="profile-info">
+                    <h1 id="profile-name">أحمد المحلل الأمني</h1>
+                    <p class="profile-role" id="profile-role">محلل أمني</p>
+                    <p class="profile-email" id="profile-email">ahmed.analyst@socify.com</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">تاريخ الانضمام</span>
+                            <span class="stat-value" id="join-date">15 يناير 2024</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">آخر تسجيل دخول</span>
+                            <span class="stat-value" id="last-login">اليوم 14:30</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary" onclick="editProfile()">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                                fill="currentColor" />
+                        </svg>
+                        تعديل الملف الشخصي
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profile Content Grid -->
+            <div class="profile-content-grid">
+                <!-- Personal Information -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2>المعلومات الشخصية</h2>
+                        <button class="btn btn-secondary" onclick="editPersonalInfo()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path
+                                    d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                                    fill="currentColor" />
+                            </svg>
+                            تعديل
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path
+                                            d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="info-content">
+                                    <label class="info-label">الاسم الكامل</label>
+                                    <span class="info-value" id="full-name">أحمد المحلل الأمني</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path
+                                            d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="info-content">
+                                    <label class="info-label">البريد الإلكتروني</label>
+                                    <span class="info-value" id="email">ahmed.analyst@socify.com</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path
+                                            d="M16,4C18.21,4 20,5.79 20,8C20,10.21 18.21,12 16,12C13.79,12 12,10.21 12,8C12,5.79 13.79,4 16,4M16,14C18.67,14 24,15.34 24,18V20H8V18C8,15.34 13.33,14 16,14M8,12C10.21,12 12,10.21 12,8C12,5.79 10.21,4 8,4C5.79,4 4,5.79 4,8C4,10.21 5.79,12 8,12M8,14C5.33,14 0,15.34 0,18V20H6V18C6,16.9 6.9,16 8,16"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="info-content">
+                                    <label class="info-label">الفريق</label>
+                                    <span class="info-value" id="team">فريق الأمن السيبراني</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path
+                                            d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11H16V18H8V11H9.2V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.4,8.7 10.4,10V11H13.6V10C13.6,8.7 12.8,8.2 12,8.2Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="info-content">
+                                    <label class="info-label">الصلاحيات</label>
+                                    <span class="info-value" id="permissions">محلل أمني</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2>إعدادات الأمان</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="security-grid">
+                            <div class="security-item">
+                                <div class="security-icon">
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path
+                                            d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="security-info">
+                                    <h3>كلمة المرور</h3>
+                                    <p>آخر تحديث: منذ 30 يوماً</p>
+                                    <div class="security-status">
+                                        <span class="status-indicator strong"></span>
+                                        <span class="status-text">قوية</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" onclick="changePassword()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path
+                                            d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                    تغيير كلمة المرور
+                                </button>
+                            </div>
+                            <div class="security-item">
+                                <div class="security-icon">
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path
+                                            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="security-info">
+                                    <h3>المصادقة الثنائية</h3>
+                                    <p>غير مفعلة</p>
+                                    <div class="security-status">
+                                        <span class="status-indicator inactive"></span>
+                                        <span class="status-text">غير مفعلة</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" onclick="enable2FA()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path
+                                            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                    تفعيل
+                                </button>
+                            </div>
+                            <div class="security-item">
+                                <div class="security-icon">
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path
+                                            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="security-info">
+                                    <h3>جلسات تسجيل الدخول</h3>
+                                    <p>3 جلسات نشطة</p>
+                                    <div class="security-status">
+                                        <span class="status-indicator active"></span>
+                                        <span class="status-text">نشطة</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary" onclick="manageSessions()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path
+                                            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                    إدارة الجلسات
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2>سجل النشاط</h2>
+                        <button class="btn btn-secondary" onclick="refreshActivity()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path
+                                    d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"
+                                    fill="currentColor" />
+                            </svg>
+                            تحديث
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <div class="activity-list" id="activity-list">
+                            <!-- Activity items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferences -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2>التفضيلات</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="preferences-grid">
+                            <div class="preference-item">
+                                <div class="preference-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path
+                                            d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.58L4,19L9,14L12.11,17.11L12.87,15.07M18.5,10H16.5L12,22H14L15.12,19H19.87L21,22H23L18.5,10M15.88,17L17.5,12.67L19.12,17H15.88Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="preference-info">
+                                    <h3>اللغة</h3>
+                                    <p>العربية</p>
+                                </div>
+                                <select class="form-select" id="language-select" title="اختر اللغة">
+                                    <option value="ar" selected>العربية</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                            <div class="preference-item">
+                                <div class="preference-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path
+                                            d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M15.5,8L10,13.5L8.5,12L7,13.5L10,16.5L17,9.5L15.5,8Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="preference-info">
+                                    <h3>المنطقة الزمنية</h3>
+                                    <p>الرياض (GMT+3)</p>
+                                </div>
+                                <select class="form-select" id="timezone-select" title="اختر المنطقة الزمنية">
+                                    <option value="Asia/Riyadh" selected>الرياض (GMT+3)</option>
+                                    <option value="UTC">UTC (GMT+0)</option>
+                                    <option value="America/New_York">نيويورك (GMT-5)</option>
+                                </select>
+                            </div>
+                            <div class="preference-item">
+                                <div class="preference-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path
+                                            d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="preference-info">
+                                    <h3>إشعارات البريد الإلكتروني</h3>
+                                    <p>مفعلة</p>
+                                </div>
+                                <label class="toggle-switch" for="email-notifications"
+                                    title="تفعيل/إيقاف إشعارات البريد الإلكتروني">
+                                    <input type="checkbox" id="email-notifications" checked
+                                        aria-label="إشعارات البريد الإلكتروني">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="preference-item">
+                                <div class="preference-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20">
+                                        <path
+                                            d="M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="preference-info">
+                                    <h3>الوضع المظلم</h3>
+                                    <p>مفعل</p>
+                                </div>
+                                <label class="toggle-switch" for="dark-mode" title="تفعيل/إيقاف الوضع المظلم">
+                                    <input type="checkbox" id="dark-mode" checked aria-label="الوضع المظلم">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">تعديل الملف الشخصي</h3>
+                <button class="modal-close" onclick="closeModal('editProfileModal')">&times;</button>
+            </div>
+            <form id="editProfileForm" class="modal-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <label for="edit-name" class="form-label">الاسم الكامل</label>
+                    <input type="text" id="edit-name" name="name" class="form-input" value="{{ session.user_name }}"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-team" class="form-label">الفريق</label>
+                    <input type="text" id="edit-team" name="team" class="form-input" value="فريق الأمن السيبراني">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-bio" class="form-label">نبذة شخصية</label>
+                    <textarea id="edit-bio" name="bio" class="form-input" rows="3"
+                        placeholder="اكتب نبذة عن نفسك..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('editProfileModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">تغيير كلمة المرور</h3>
+                <button class="modal-close" onclick="closeModal('changePasswordModal')">&times;</button>
+            </div>
+            <form id="changePasswordForm" class="modal-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <label for="current-password" class="form-label">كلمة المرور الحالية</label>
+                    <input type="password" id="current-password" name="current_password" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="new-password" class="form-label">كلمة المرور الجديدة</label>
+                    <input type="password" id="new-password" name="new_password" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password" class="form-label">تأكيد كلمة المرور</label>
+                    <input type="password" id="confirm-password" name="confirm_password" class="form-input" required>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('changePasswordModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">تغيير كلمة المرور</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+
+</html>

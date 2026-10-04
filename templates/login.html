@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>تسجيل الدخول - SOCify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+
+<body class="auth-body">
+    <!-- Background Animation -->
+    <div class="auth-background">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 100 100" width="48" height="48">
+                            <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" fill="none" stroke="#1565C0"
+                                stroke-width="3" />
+                            <circle cx="50" cy="50" r="15" fill="#00E5FF" />
+                            <circle cx="50" cy="50" r="8" fill="#1565C0" />
+                        </svg>
+                    </div>
+                    <span class="logo-text">SOCify</span>
+                </div>
+                <h1 class="auth-title">مرحباً بك مرة أخرى</h1>
+                <p class="auth-subtitle">سجل دخولك للوصول إلى مركز عمليات الأمن السيبراني</p>
+            </div>
+
+            <form class="auth-form" method="POST" id="loginForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4M20,8L12,13L4,8V6L12,11L20,6V8Z"
+                                fill="currentColor" />
+                        </svg>
+                        البريد الإلكتروني
+                    </label>
+                    <input type="email" id="email" name="email" class="form-input" required
+                        placeholder="أدخل بريدك الإلكتروني">
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                                fill="currentColor" />
+                        </svg>
+                        كلمة المرور
+                    </label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" name="password" class="form-input" required
+                            placeholder="أدخل كلمة المرور">
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path
+                                    d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="remember" name="remember">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">تذكرني</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full btn-auth">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path
+                            d="M10,17V14H3V10H10V7L15,12L10,17M11,1A10,10 0 0,1 21,11A10,10 0 0,1 11,21A10,10 0 0,1 1,11A10,10 0 0,1 11,1Z"
+                            fill="currentColor" />
+                    </svg>
+                    تسجيل الدخول
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <div class="auth-links">
+                    <p>ليس لديك حساب؟ <a href="{{ url_for('register') }}" class="auth-link">إنشاء حساب جديد</a></p>
+                    <p><a href="#" class="auth-link">نسيت كلمة المرور؟</a></p>
+                </div>
+                <div class="back-to-home">
+                    <a href="{{ url_for('index') }}" class="btn btn-outline btn-small">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" fill="currentColor" />
+                        </svg>
+                        العودة للصفحة الرئيسية
+                    </a>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        {% if category == 'success' %}
+                        <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"
+                            fill="currentColor" />
+                        {% elif category == 'error' %}
+                        <path
+                            d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                            fill="currentColor" />
+                        {% else %}
+                        <path
+                            d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+                            fill="currentColor" />
+                        {% endif %}
+                    </svg>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+
+</html>

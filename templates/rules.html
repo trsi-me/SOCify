@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>إدارة القواعد - SOCify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rules.css') }}">
+</head>
+
+<body class="dashboard-body">
+    <!-- Navigation -->
+    <nav class="dashboard-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                        fill="currentColor" />
+                </svg>
+                <span>SOCify</span>
+            </div>
+
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M3,13H11V3H3M3,21H11V15H3M13,21H21V11H13M13,3V9H21V3" fill="currentColor" />
+                    </svg>
+                    لوحة التحكم
+                </a>
+                <a href="/events" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"
+                            fill="currentColor" />
+                    </svg>
+                    الأحداث الأمنية
+                </a>
+                <a href="/rules" class="nav-link active">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+                            fill="currentColor" />
+                    </svg>
+                    إدارة القواعد
+                </a>
+                <a href="/lab" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M19.43,12.98C19.47,12.66 19.5,12.34 19.5,12C19.5,11.66 19.47,11.34 19.43,11.02L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11.02C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.98M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5Z"
+                            fill="currentColor" />
+                    </svg>
+                    المختبر
+                </a>
+                <a href="/profile" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                            fill="currentColor" />
+                    </svg>
+                    الملف الشخصي
+                </a>
+            </div>
+
+            <div class="nav-user">
+                <div class="user-info">
+                    <span class="user-name">{{ session.user_name }}</span>
+                    <span class="user-role">{{ session.user_role|getRoleName }}</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z"
+                            fill="currentColor" />
+                    </svg>
+                    تسجيل الخروج
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <!-- Rules Header -->
+            <div class="rules-header">
+                <div class="header-content">
+                    <h1>محرك القواعد الأمنية</h1>
+                    <p>إنشاء وإدارة قواعد الكشف عن التهديدات والأحداث الأمنية</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="showCreateRuleModal()">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor" />
+                        </svg>
+                        إنشاء قاعدة جديدة
+                    </button>
+                    <button class="btn btn-secondary" onclick="refreshRules()">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"
+                                fill="currentColor" />
+                        </svg>
+                        تحديث
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rules Statistics -->
+            <div class="rules-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path
+                                d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+                                fill="currentColor" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>إجمالي القواعد</h3>
+                        <span class="stat-number" id="total-rules">0</span>
+                        <span class="stat-label">قاعدة</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path
+                                d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                fill="currentColor" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>القواعد النشطة</h3>
+                        <span class="stat-number" id="active-rules">0</span>
+                        <span class="stat-label">قاعدة نشطة</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>الأحداث المولدة</h3>
+                        <span class="stat-number" id="events-generated">0</span>
+                        <span class="stat-label">حدث اليوم</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path
+                                d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                fill="currentColor" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>معدل التفعيل</h3>
+                        <span class="stat-number" id="activation-rate">0%</span>
+                        <span class="stat-label">معدل النجاح</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rules Management -->
+            <div class="rules-management">
+                <div class="management-header">
+                    <h2>إدارة القواعد</h2>
+                    <div class="filters">
+                        <select id="rule-status-filter" class="filter-select">
+                            <option value="">جميع الحالات</option>
+                            <option value="active">نشط</option>
+                            <option value="inactive">غير نشط</option>
+                            <option value="draft">مسودة</option>
+                        </select>
+                        <select id="rule-category-filter" class="filter-select">
+                            <option value="">جميع الفئات</option>
+                            <option value="authentication">المصادقة</option>
+                            <option value="network">الشبكة</option>
+                            <option value="application">التطبيقات</option>
+                            <option value="system">النظام</option>
+                        </select>
+                        <input type="text" id="rule-search" placeholder="البحث في القواعد..." class="search-input">
+                    </div>
+                </div>
+
+                <div class="rules-grid" id="rules-grid">
+                    <!-- Rules will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Rule Templates -->
+            <div class="rule-templates">
+                <h2>قوالب القواعد الجاهزة</h2>
+                <div class="templates-grid">
+                    <div class="template-card" onclick="useTemplate('failed-login')">
+                        <div class="template-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path
+                                    d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <h3>فشل تسجيل الدخول المتكرر</h3>
+                        <p>كشف محاولات تسجيل الدخول الفاشلة المتكررة</p>
+                        <div class="template-tags">
+                            <span class="tag">المصادقة</span>
+                            <span class="tag">Brute Force</span>
+                        </div>
+                    </div>
+
+                    <div class="template-card" onclick="useTemplate('port-scan')">
+                        <div class="template-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path
+                                    d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <h3>فحص المنافذ</h3>
+                        <p>كشف محاولات فحص المنافذ والاستطلاع</p>
+                        <div class="template-tags">
+                            <span class="tag">الشبكة</span>
+                            <span class="tag">Reconnaissance</span>
+                        </div>
+                    </div>
+
+                    <div class="template-card" onclick="useTemplate('sql-injection')">
+                        <div class="template-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path
+                                    d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <h3>حقن SQL</h3>
+                        <p>كشف محاولات حقن قاعدة البيانات</p>
+                        <div class="template-tags">
+                            <span class="tag">التطبيقات</span>
+                            <span class="tag">SQL Injection</span>
+                        </div>
+                    </div>
+
+                    <div class="template-card" onclick="useTemplate('ddos')">
+                        <div class="template-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path
+                                    d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <h3>هجوم DDoS</h3>
+                        <p>كشف هجمات رفض الخدمة الموزع</p>
+                        <div class="template-tags">
+                            <span class="tag">الشبكة</span>
+                            <span class="tag">DDoS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Rule Modal -->
+    <div id="createRuleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">إنشاء قاعدة جديدة</h3>
+                <button class="modal-close" onclick="closeModal('createRuleModal')">&times;</button>
+            </div>
+            <form id="createRuleForm" class="modal-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <label for="rule-name" class="form-label">اسم القاعدة</label>
+                    <input type="text" id="rule-name" name="name" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rule-description" class="form-label">الوصف</label>
+                    <textarea id="rule-description" name="description" class="form-input" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="rule-category" class="form-label">الفئة</label>
+                    <select id="rule-category" name="category" class="form-input" required>
+                        <option value="">اختر الفئة</option>
+                        <option value="authentication">المصادقة</option>
+                        <option value="network">الشبكة</option>
+                        <option value="application">التطبيقات</option>
+                        <option value="system">النظام</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="rule-severity" class="form-label">الخطورة</label>
+                    <select id="rule-severity" name="severity" class="form-input" required>
+                        <option value="">اختر الخطورة</option>
+                        <option value="critical">حرج</option>
+                        <option value="high">عالي</option>
+                        <option value="medium">متوسط</option>
+                        <option value="low">منخفض</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="rule-condition" class="form-label">الشرط</label>
+                    <textarea id="rule-condition" name="condition" class="form-input" rows="4"
+                        placeholder="مثال: failed_logins > 5 AND time_window < 600" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="rule-action" class="form-label">الإجراء</label>
+                    <select id="rule-action" name="action" class="form-input" required>
+                        <option value="">اختر الإجراء</option>
+                        <option value="alert">تنبيه</option>
+                        <option value="block">حظر</option>
+                        <option value="log">تسجيل</option>
+                        <option value="escalate">تصعيد</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" id="rule-enabled" name="enabled" checked>
+                        <span class="checkmark"></span>
+                        تفعيل القاعدة فوراً
+                    </label>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('createRuleModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إنشاء القاعدة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/rules.js') }}"></script>
+</body>
+
+</html>

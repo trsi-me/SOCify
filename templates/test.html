@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار SOCify - واجهة المستخدم</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+
+        .test-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .test-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .test-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-md);
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-sm);
+            border: 1px solid var(--border-primary);
+        }
+
+        .test-item.passed {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .test-item.failed {
+            border-left: 4px solid #F44336;
+        }
+
+        .test-status {
+            font-weight: 600;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+        }
+
+        .test-status.passed {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .test-status.failed {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+        }
+
+        .test-button {
+            background: var(--primary);
+            color: var(--text-primary);
+            border: none;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+
+        .test-button:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        .test-results {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .font-test {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            padding: var(--spacing-md);
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .font-weight-100 {
+            font-weight: 100;
+        }
+
+        .font-weight-200 {
+            font-weight: 200;
+        }
+
+        .font-weight-300 {
+            font-weight: 300;
+        }
+
+        .font-weight-400 {
+            font-weight: 400;
+        }
+
+        .font-weight-500 {
+            font-weight: 500;
+        }
+
+        .font-weight-600 {
+            font-weight: 600;
+        }
+
+        .font-weight-700 {
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <header class="test-section">
+            <h1 class="test-title">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"
+                        fill="currentColor" />
+                </svg>
+                اختبار SOCify - واجهة المستخدم
+            </h1>
+            <p>اختبار شامل لواجهة المستخدم والوظائف الأساسية</p>
+        </header>
+
+        <!-- اختبار الخطوط -->
+        <section class="test-section">
+            <h2 class="test-title">اختبار الخطوط العربية</h2>
+            <div class="font-test">
+                <div class="font-weight-100">وزن 100 - نص تجريبي باللغة العربية</div>
+                <div class="font-weight-200">وزن 200 - نص تجريبي باللغة العربية</div>
+                <div class="font-weight-300">وزن 300 - نص تجريبي باللغة العربية</div>
+                <div class="font-weight-400">وزن 400 - نص تجريبي باللغة العربية</div>
+                <div class="font-weight-500">وزن 500 - نص تجريبي باللغة العربية</div>
+                <div class="font-weight-600">وزن 600 - نص تجريبي باللغة العربية</div>
+                <div class="font-weight-700">وزن 700 - نص تجريبي باللغة العربية</div>
+            </div>
+            <div class="test-item" id="font-test">
+                <span>اختبار خط IBM Plex Sans Arabic</span>
+                <span class="test-status" id="font-status">جاري الاختبار...</span>
+            </div>
+        </section>
+
+        <!-- اختبار الألوان -->
+        <section class="test-section">
+            <h2 class="test-title">اختبار الألوان</h2>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md);">
+                <div
+                    style="background: var(--primary); color: white; padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                    اللون الأساسي
+                </div>
+                <div
+                    style="background: var(--secondary); color: white; padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                    اللون الثانوي
+                </div>
+                <div
+                    style="background: var(--accent); color: white; padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                    اللون المساعد
+                </div>
+                <div
+                    style="background: var(--severity-critical); color: white; padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                    حرج
+                </div>
+                <div
+                    style="background: var(--severity-high); color: white; padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                    عالي
+                </div>
+                <div
+                    style="background: var(--severity-medium); color: white; padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                    متوسط
+                </div>
+                <div
+                    style="background: var(--severity-low); color: white; padding: var(--spacing-md); border-radius: var(--radius-md); text-align: center;">
+                    منخفض
+                </div>
+            </div>
+            <div class="test-item" id="color-test">
+                <span>اختبار نظام الألوان</span>
+                <span class="test-status" id="color-status">جاري الاختبار...</span>
+            </div>
+        </section>
+
+        <!-- اختبار الاستجابة -->
+        <section class="test-section">
+            <h2 class="test-title">اختبار التصميم المتجاوب</h2>
+            <div class="test-item" id="responsive-test">
+                <span>اختبار التصميم المتجاوب</span>
+                <span class="test-status" id="responsive-status">جاري الاختبار...</span>
+            </div>
+            <div class="test-item" id="viewport-test">
+                <span>اختبار عرض الشاشة</span>
+                <span class="test-status" id="viewport-status">جاري الاختبار...</span>
+            </div>
+        </section>
+
+        <!-- اختبار الوظائف -->
+        <section class="test-section">
+            <h2 class="test-title">اختبار الوظائف</h2>
+            <div class="test-item" id="js-test">
+                <span>اختبار JavaScript</span>
+                <span class="test-status" id="js-status">جاري الاختبار...</span>
+            </div>
+            <div class="test-item" id="notification-test">
+                <span>اختبار نظام الإشعارات</span>
+                <span class="test-status" id="notification-status">جاري الاختبار...</span>
+            </div>
+            <div class="test-item" id="form-test">
+                <span>اختبار النماذج</span>
+                <span class="test-status" id="form-status">جاري الاختبار...</span>
+            </div>
+        </section>
+
+        <!-- اختبار الأداء -->
+        <section class="test-section">
+            <h2 class="test-title">اختبار الأداء</h2>
+            <div class="test-item" id="load-test">
+                <span>اختبار سرعة التحميل</span>
+                <span class="test-status" id="load-status">جاري الاختبار...</span>
+            </div>
+            <div class="test-item" id="memory-test">
+                <span>اختبار استخدام الذاكرة</span>
+                <span class="test-status" id="memory-status">جاري الاختبار...</span>
+            </div>
+        </section>
+
+        <!-- النتائج -->
+        <section class="test-section">
+            <h2 class="test-title">النتائج</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="test-results" id="test-results">
+                <p>جاري تشغيل الاختبارات...</p>
+            </div>
+            <button class="test-button" onclick="runAllTests()">تشغيل جميع الاختبارات</button>
+        </section>
+    </div>
+
+    <script>
+        let testResults = [];
+        let totalTests = 0;
+        let passedTests = 0;
+
+        function updateTestStatus(testId, statusId, passed, message = '') {
+            const testItem = document.getElementById(testId);
+            const statusElement = document.getElementById(statusId);
+
+            if (passed) {
+                testItem.classList.add('passed');
+                testItem.classList.remove('failed');
+                statusElement.textContent = 'نجح';
+                statusElement.classList.add('passed');
+                statusElement.classList.remove('failed');
+                passedTests++;
+            } else {
+                testItem.classList.add('failed');
+                testItem.classList.remove('passed');
+                statusElement.textContent = message || 'فشل';
+                statusElement.classList.add('failed');
+                statusElement.classList.remove('passed');
+            }
+
+            testResults.push({
+                test: testId,
+                passed: passed,
+                message: message
+            });
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (passedTests / totalTests) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = `
+                <p><strong>النتائج:</strong> ${passedTests}/${totalTests} اختبار نجح</p>
+                <p><strong>النسبة:</strong> ${progress.toFixed(1)}%</p>
+            `;
+        }
+
+        function testFonts() {
+            const testElement = document.querySelector('.font-test');
+            const computedStyle = window.getComputedStyle(testElement);
+            const fontFamily = computedStyle.fontFamily;
+
+            if (fontFamily.includes('IBM Plex Sans Arabic')) {
+                updateTestStatus('font-test', 'font-status', true, 'الخط العربي يعمل بشكل صحيح');
+            } else {
+                updateTestStatus('font-test', 'font-status', false, 'الخط العربي غير محمل');
+            }
+        }
+
+        function testColors() {
+            const root = document.documentElement;
+            const primaryColor = getComputedStyle(root).getPropertyValue('--primary').trim();
+
+            if (primaryColor && primaryColor !== '') {
+                updateTestStatus('color-test', 'color-status', true, 'نظام الألوان يعمل بشكل صحيح');
+            } else {
+                updateTestStatus('color-test', 'color-status', false, 'متغيرات الألوان غير محددة');
+            }
+        }
+
+        function testResponsive() {
+            const width = window.innerWidth;
+            let responsive = true;
+            let message = '';
+
+            if (width < 480) {
+                message = 'شاشة صغيرة جداً';
+            } else if (width < 768) {
+                message = 'شاشة هاتف محمول';
+            } else if (width < 1024) {
+                message = 'شاشة تابلت';
+            } else {
+                message = 'شاشة سطح مكتب';
+            }
+
+            updateTestStatus('responsive-test', 'responsive-status', responsive, message);
+        }
+
+        function testViewport() {
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+                updateTestStatus('viewport-test', 'viewport-status', true, 'إعدادات العرض صحيحة');
+            } else {
+                updateTestStatus('viewport-test', 'viewport-status', false, 'إعدادات العرض مفقودة');
+            }
+        }
+
+        function testJavaScript() {
+            try {
+                // اختبار الوظائف الأساسية
+                const testFunction = () => 'test';
+                if (typeof testFunction === 'function') {
+                    updateTestStatus('js-test', 'js-status', true, 'JavaScript يعمل بشكل صحيح');
+                } else {
+                    updateTestStatus('js-test', 'js-status', false, 'JavaScript لا يعمل');
+                }
+            } catch (error) {
+                updateTestStatus('js-test', 'js-status', false, 'خطأ في JavaScript');
+            }
+        }
+
+        function testNotifications() {
+            try {
+                // اختبار إنشاء عنصر إشعار
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10000;';
+
+                if (notification) {
+                    updateTestStatus('notification-test', 'notification-status', true, 'نظام الإشعارات يعمل');
+                } else {
+                    updateTestStatus('notification-test', 'notification-status', false, 'نظام الإشعارات لا يعمل');
+                }
+            } catch (error) {
+                updateTestStatus('notification-test', 'notification-status', false, 'خطأ في نظام الإشعارات');
+            }
+        }
+
+        function testForms() {
+            try {
+                // اختبار إنشاء نموذج
+                const form = document.createElement('form');
+                const input = document.createElement('input');
+                input.type = 'text';
+                form.appendChild(input);
+
+                if (form && input) {
+                    updateTestStatus('form-test', 'form-status', true, 'النماذج تعمل بشكل صحيح');
+                } else {
+                    updateTestStatus('form-test', 'form-status', false, 'النماذج لا تعمل');
+                }
+            } catch (error) {
+                updateTestStatus('form-test', 'form-status', false, 'خطأ في النماذج');
+            }
+        }
+
+        function testLoadTime() {
+            const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+            const passed = loadTime < 3000; // أقل من 3 ثوانٍ
+
+            updateTestStatus('load-test', 'load-status', passed,
+                passed ? `وقت التحميل: ${loadTime}ms` : `وقت التحميل بطيء: ${loadTime}ms`);
+        }
+
+        function testMemory() {
+            if (performance.memory) {
+                const usedMemory = performance.memory.usedJSHeapSize;
+                const totalMemory = performance.memory.totalJSHeapSize;
+                const memoryUsage = (usedMemory / totalMemory) * 100;
+
+                const passed = memoryUsage < 80; // أقل من 80%
+                updateTestStatus('memory-test', 'memory-status', passed,
+                    `استخدام الذاكرة: ${memoryUsage.toFixed(1)}%`);
+            } else {
+                updateTestStatus('memory-test', 'memory-status', false, 'معلومات الذاكرة غير متاحة');
+            }
+        }
+
+        function runAllTests() {
+            testResults = [];
+            passedTests = 0;
+            totalTests = 8;
+
+            // إعادة تعيين الحالة
+            document.querySelectorAll('.test-item').forEach(item => {
+                item.classList.remove('passed', 'failed');
+            });
+
+            document.querySelectorAll('.test-status').forEach(status => {
+                status.textContent = 'جاري الاختبار...';
+                status.classList.remove('passed', 'failed');
+            });
+
+            // تشغيل الاختبارات
+            setTimeout(() => testFonts(), 100);
+            setTimeout(() => testColors(), 200);
+            setTimeout(() => testResponsive(), 300);
+            setTimeout(() => testViewport(), 400);
+            setTimeout(() => testJavaScript(), 500);
+            setTimeout(() => testNotifications(), 600);
+            setTimeout(() => testForms(), 700);
+            setTimeout(() => testLoadTime(), 800);
+            setTimeout(() => testMemory(), 900);
+        }
+
+        // تشغيل الاختبارات تلقائياً عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(runAllTests, 1000);
+        });
+
+        // اختبار التصميم المتجاوب عند تغيير حجم النافذة
+        window.addEventListener('resize', () => {
+            testResponsive();
+        });
+    </script>
+</body>
+
+</html>

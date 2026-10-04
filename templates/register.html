@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>إنشاء حساب - SOCify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+
+<body class="auth-body">
+    <!-- Background Animation -->
+    <div class="auth-background">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 100 100" width="48" height="48">
+                            <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" fill="none" stroke="#1565C0"
+                                stroke-width="3" />
+                            <circle cx="50" cy="50" r="15" fill="#00E5FF" />
+                            <circle cx="50" cy="50" r="8" fill="#1565C0" />
+                        </svg>
+                    </div>
+                    <span class="logo-text">SOCify</span>
+                </div>
+                <h1 class="auth-title">انضم إلى SOCify</h1>
+                <p class="auth-subtitle">أنشئ حسابك الجديد وابدأ رحلتك في عالم الأمن السيبراني</p>
+            </div>
+
+            <form class="auth-form" method="POST" id="registerForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="name" class="form-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                                fill="currentColor" />
+                        </svg>
+                        الاسم الكامل
+                    </label>
+                    <input type="text" id="name" name="name" class="form-input" required placeholder="أدخل اسمك الكامل">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4M20,8L12,13L4,8V6L12,11L20,6V8Z"
+                                fill="currentColor" />
+                        </svg>
+                        البريد الإلكتروني
+                    </label>
+                    <input type="email" id="email" name="email" class="form-input" required
+                        placeholder="أدخل بريدك الإلكتروني">
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                                fill="currentColor" />
+                        </svg>
+                        كلمة المرور
+                    </label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" name="password" class="form-input" required minlength="8"
+                            placeholder="أدخل كلمة المرور (8 أحرف على الأقل)">
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path
+                                    d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="form-hint">يجب أن تكون كلمة المرور 8 أحرف على الأقل</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11.5C15.4,11.5 16,12.1 16,12.7V16.2C16,16.8 15.4,17.3 14.8,17.3H9.2C8.6,17.3 8,16.8 8,16.2V12.6C8,12 8.6,11.5 9.2,11.5V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.4,8.7 10.4,10V11.5H13.6V10C13.6,8.7 12.8,8.2 12,8.2Z"
+                                fill="currentColor" />
+                        </svg>
+                        تأكيد كلمة المرور
+                    </label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-input" required
+                            placeholder="أعد إدخال كلمة المرور">
+                        <button type="button" class="password-toggle" onclick="toggleConfirmPassword()">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path
+                                    d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="team" class="form-label">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path
+                                d="M16,4C18.2,4 20,5.8 20,8C20,10.2 18.2,12 16,12C13.8,12 12,10.2 12,8C12,5.8 13.8,4 16,4M16,14C20.4,14 24,15.8 24,18V20H8V18C8,15.8 11.6,14 16,14M8,4C10.2,4 12,5.8 12,8C12,10.2 10.2,12 8,12C5.8,12 4,10.2 4,8C4,5.8 5.8,4 8,4M8,14C12.4,14 16,15.8 16,18V20H0V18C0,15.8 3.6,14 8,14Z"
+                                fill="currentColor" />
+                        </svg>
+                        الفريق (اختياري)
+                    </label>
+                    <input type="text" id="team" name="team" class="form-input" placeholder="مثل: فريق الأمن السيبراني">
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">أوافق على <a href="#" class="auth-link">شروط الاستخدام</a> و <a
+                                href="#" class="auth-link">سياسة الخصوصية</a></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full btn-auth">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor" />
+                    </svg>
+                    إنشاء الحساب
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <div class="auth-links">
+                    <p>لديك حساب بالفعل؟ <a href="{{ url_for('login') }}" class="auth-link">تسجيل الدخول</a></p>
+                </div>
+                <div class="back-to-home">
+                    <a href="{{ url_for('index') }}" class="btn btn-outline btn-small">
+                        <svg viewBox="0 0 24 24" width="16" height="16">
+                            <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" fill="currentColor" />
+                        </svg>
+                        العودة للصفحة الرئيسية
+                    </a>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        {% if category == 'success' %}
+                        <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"
+                            fill="currentColor" />
+                        {% elif category == 'error' %}
+                        <path
+                            d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                            fill="currentColor" />
+                        {% else %}
+                        <path
+                            d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+                            fill="currentColor" />
+                        {% endif %}
+                    </svg>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+
+</html>

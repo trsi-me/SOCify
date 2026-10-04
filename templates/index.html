@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOCify - مركز عمليات الأمن السيبراني</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 100 100" width="40" height="40">
+                            <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" fill="none" stroke="#1565C0"
+                                stroke-width="3" />
+                            <circle cx="50" cy="50" r="15" fill="#00E5FF" />
+                            <circle cx="50" cy="50" r="8" fill="#1565C0" />
+                        </svg>
+                    </div>
+                    <span class="logo-text">SOCify</span>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                            fill="currentColor" />
+                    </svg>
+                    المميزات
+                </a>
+                <a href="#about" class="nav-link">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
+                            fill="currentColor" />
+                    </svg>
+                    حول المنصة
+                </a>
+                <a href="{{ url_for('login') }}" class="nav-link nav-login">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path
+                            d="M10,17V14H3V10H10V7L15,12L10,17M11,1A10,10 0 0,1 21,11A10,10 0 0,1 11,21A10,10 0 0,1 1,11A10,10 0 0,1 11,1Z"
+                            fill="currentColor" />
+                    </svg>
+                    تسجيل الدخول
+                </a>
+                <a href="{{ url_for('register') }}" class="nav-link btn-primary nav-register">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor" />
+                    </svg>
+                    إنشاء حساب
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">مرحباً بك في SOCify</h1>
+                <p class="hero-subtitle">منصة محاكاة مراكز عمليات الأمن السيبراني المتقدمة</p>
+                <p class="hero-description">
+                    نظام شامل لمراقبة وتحليل الأحداث الأمنية في الوقت الحقيقي،
+                    مع واجهة احترافية لإدارة التهديدات والاستجابة للحوادث الأمنية.
+                </p>
+                <div class="hero-actions">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-large">ابدأ الآن</a>
+                    <a href="#features" class="btn btn-secondary btn-large">اعرف المزيد</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-grid">
+                    <!-- Stats Cards -->
+                    <div class="dashboard-card stats-card">
+                        <div class="card-header">
+                            <h3 class="card-title">إحصائيات الأحداث</h3>
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20">
+                                    <path
+                                        d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card critical">
+                                <div class="stat-icon">
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">12</div>
+                                    <div class="stat-label">حرج</div>
+                                </div>
+                            </div>
+                            <div class="stat-card high">
+                                <div class="stat-icon">
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">28</div>
+                                    <div class="stat-label">عالي</div>
+                                </div>
+                            </div>
+                            <div class="stat-card medium">
+                                <div class="stat-icon">
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">45</div>
+                                    <div class="stat-label">متوسط</div>
+                                </div>
+                            </div>
+                            <div class="stat-card low">
+                                <div class="stat-icon">
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                            fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">67</div>
+                                    <div class="stat-label">منخفض</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Events Card -->
+                    <div class="dashboard-card events-card">
+                        <div class="card-header">
+                            <h3 class="card-title">الأحداث الأخيرة</h3>
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20">
+                                    <path
+                                        d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="events-list">
+                            <div class="event-item critical">
+                                <div class="event-indicator"></div>
+                                <div class="event-content">
+                                    <div class="event-time">14:32</div>
+                                    <div class="event-title">محاولة تسجيل دخول مشبوهة</div>
+                                    <div class="event-source">Firewall-01</div>
+                                </div>
+                            </div>
+                            <div class="event-item high">
+                                <div class="event-indicator"></div>
+                                <div class="event-content">
+                                    <div class="event-time">14:28</div>
+                                    <div class="event-title">تنبيه من نظام كشف التسلل</div>
+                                    <div class="event-source">IDS-01</div>
+                                </div>
+                            </div>
+                            <div class="event-item medium">
+                                <div class="event-indicator"></div>
+                                <div class="event-content">
+                                    <div class="event-time">14:25</div>
+                                    <div class="event-title">خطأ في الخادم الرئيسي</div>
+                                    <div class="event-source">Server-01</div>
+                                </div>
+                            </div>
+                            <div class="event-item low">
+                                <div class="event-indicator"></div>
+                                <div class="event-content">
+                                    <div class="event-time">14:20</div>
+                                    <div class="event-title">اتصال غير مصرح به</div>
+                                    <div class="event-source">Firewall-02</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Status Card -->
+                    <div class="dashboard-card status-card">
+                        <div class="card-header">
+                            <h3 class="card-title">حالة النظام</h3>
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20">
+                                    <path
+                                        d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11.5C15.4,11.5 16,12.1 16,12.7V16.2C16,16.8 15.4,17.3 14.8,17.3H9.2C8.6,17.3 8,16.8 8,16.2V12.6C8,12 8.6,11.5 9.2,11.5V10C9.2,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.4,8.7 10.4,10V11.5H13.6V10C13.6,8.7 12.8,8.2 12,8.2Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <div class="status-indicator online"></div>
+                                <div class="status-info">
+                                    <div class="status-name">جدار الحماية</div>
+                                    <div class="status-value">نشط</div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-indicator online"></div>
+                                <div class="status-info">
+                                    <div class="status-name">نظام كشف التسلل</div>
+                                    <div class="status-value">نشط</div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-indicator warning"></div>
+                                <div class="status-info">
+                                    <div class="status-name">الخادم الرئيسي</div>
+                                    <div class="status-value">تحذير</div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-indicator online"></div>
+                                <div class="status-info">
+                                    <div class="status-name">قاعدة البيانات</div>
+                                    <div class="status-value">نشط</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Timeline Card -->
+                    <div class="dashboard-card timeline-card">
+                        <div class="card-header">
+                            <h3 class="card-title">خط زمني للنشاط</h3>
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20">
+                                    <path
+                                        d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">14:35</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">تم حل الحدث الحرج</div>
+                                    <div class="timeline-description">محاولة تسجيل الدخول المشبوهة</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">14:30</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">تنبيه جديد</div>
+                                    <div class="timeline-description">رصد نشاط مشبوه في الشبكة</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">14:25</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">تحديث النظام</div>
+                                    <div class="timeline-description">تم تحديث قواعد الكشف</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">المميزات الرئيسية</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" width="48" height="48">
+                                <path
+                                    d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M12 7C13.4 7 14.8 8.6 14.8 10V11.5C15.4 11.5 16 12.1 16 12.7V16.2C16 16.8 15.4 17.3 14.8 17.3H9.2C8.6 17.3 8 16.8 8 16.2V12.6C8 12 8.6 11.5 9.2 11.5V10C9.2 8.6 10.6 7 12 7M12 8.2C11.2 8.2 10.4 8.7 10.4 10V11.5H13.6V10C13.6 8.7 12.8 8.2 12 8.2Z"
+                                    fill="#1565C0" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">مراقبة الأحداث</h3>
+                        <p class="feature-description">
+                            مراقبة وتحليل الأحداث الأمنية من مصادر متعددة في الوقت الحقيقي
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" width="48" height="48">
+                                <path
+                                    d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"
+                                    fill="#00E5FF" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">محرك القواعد</h3>
+                        <p class="feature-description">
+                            نظام ذكي لإنشاء وتنفيذ قواعد الكشف عن التهديدات تلقائياً
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" width="48" height="48">
+                                <path
+                                    d="M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M19,21H8V7H19V21Z"
+                                    fill="#6A1B9A" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">لوحة التحكم</h3>
+                        <p class="feature-description">
+                            واجهة احترافية لعرض الإحصائيات والتحكم في النظام
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" width="48" height="48">
+                                <path
+                                    d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                    fill="#FF1744" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">الأمان والخصوصية</h3>
+                        <p class="feature-description">
+                            حماية متقدمة للبيانات مع تشفير كلمات المرور وسجل التدقيق
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <h2 class="section-title">حول SOCify</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>
+                            SOCify هي منصة متكاملة لمحاكاة مراكز عمليات الأمن السيبراني،
+                            مصممة لتوفير بيئة تدريبية واقعية للمحللين الأمنيين ومديري SOC.
+                        </p>
+                        <p>
+                            تهدف المنصة إلى تطوير المهارات العملية في مجال الأمن السيبراني
+                            من خلال محاكاة السيناريوهات الحقيقية وإدارة الأحداث الأمنية.
+                        </p>
+                        <div class="about-features">
+                            <div class="about-feature">
+                                <span class="feature-check">✓</span>
+                                <span>واجهة مستخدم متجاوبة وسهلة الاستخدام</span>
+                            </div>
+                            <div class="about-feature">
+                                <span class="feature-check">✓</span>
+                                <span>دعم كامل للغة العربية مع اتجاه RTL</span>
+                            </div>
+                            <div class="about-feature">
+                                <span class="feature-check">✓</span>
+                                <span>نظام أدوار متقدم للمستخدمين</span>
+                            </div>
+                            <div class="about-feature">
+                                <span class="feature-check">✓</span>
+                                <span>سجل تدقيق شامل لجميع العمليات</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg viewBox="0 0 100 100" width="32" height="32">
+                                <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" fill="none" stroke="#1565C0"
+                                    stroke-width="3" />
+                                <circle cx="50" cy="50" r="15" fill="#00E5FF" />
+                                <circle cx="50" cy="50" r="8" fill="#1565C0" />
+                            </svg>
+                        </div>
+                        <span class="logo-text">SOCify</span>
+                    </div>
+                    <p class="footer-description">
+                        منصة محاكاة مراكز عمليات الأمن السيبراني المتقدمة
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-section">
+                        <h4 class="footer-title">الروابط السريعة</h4>
+                        <a href="#features" class="footer-link">المميزات</a>
+                        <a href="#about" class="footer-link">حول المنصة</a>
+                        <a href="{{ url_for('login') }}" class="footer-link">تسجيل الدخول</a>
+                    </div>
+                    <div class="footer-section">
+                        <h4 class="footer-title">الدعم</h4>
+                        <a href="#" class="footer-link">الوثائق</a>
+                        <a href="#" class="footer-link">المساعدة</a>
+                        <a href="#" class="footer-link">التواصل</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SOCify. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

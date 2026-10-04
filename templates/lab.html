@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>مختبر المحاكاة - SOCify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lab.css') }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="dashboard-body">
+    <!-- Navigation -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" width="32" height="32">
+                        <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" fill="none" stroke="#1565C0"
+                            stroke-width="3" />
+                        <circle cx="50" cy="50" r="15" fill="#00E5FF" />
+                        <circle cx="50" cy="50" r="8" fill="#1565C0" />
+                    </svg>
+                </div>
+                <span class="logo-text">SOCify</span>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <h1 class="dashboard-title">مختبر المحاكاة الأمنية</h1>
+        </div>
+
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-info">
+                    <span class="user-name">{{ session.user_name }}</span>
+                    <span class="user-role">{{ session.user_role|getRoleName }}</span>
+                </div>
+                <div class="user-actions">
+                    <a href="/dashboard" class="btn btn-secondary">لوحة التحكم</a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline">تسجيل الخروج</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M3,13H11V3H3M3,21H11V15H3M13,21H21V11H13M13,3V9H21V3" fill="currentColor" />
+                    </svg>
+                    <span>لوحة التحكم</span>
+                </a>
+                <a href="#events" class="nav-item">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>الأحداث الأمنية</span>
+                </a>
+                <a href="/rules" class="nav-item">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>إدارة القواعد</span>
+                </a>
+                <a href="/lab" class="nav-item active">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M19.43,12.98C19.47,12.66 19.5,12.34 19.5,12C19.5,11.66 19.47,11.34 19.43,11.02L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11.02C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.98M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>المختبر</span>
+                </a>
+                <a href="/profile" class="nav-item">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>الملف الشخصي</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <!-- Lab Header -->
+            <div class="section-header">
+                <div class="section-title">
+                    <h2>مختبر المحاكاة الأمنية</h2>
+                    <p>محاكاة الهجمات والثغرات الأمنية للتدريب والتعلم</p>
+                </div>
+                <div class="section-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path
+                                    d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="totalSimulations">0</span>
+                            <span class="stat-label">المحاكاة النشطة</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="totalEvents">0</span>
+                            <span class="stat-label">الأحداث المسجلة</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring Panel - Terminal Style -->
+            <div class="monitoring-panel terminal-style">
+                <div class="terminal-header">
+                    <div class="terminal-controls">
+                        <div class="terminal-button close"></div>
+                        <div class="terminal-button minimize"></div>
+                        <div class="terminal-button maximize"></div>
+                    </div>
+                    <div class="terminal-title">SOCify Security Monitor</div>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-prompt">
+                        <span class="prompt-user">socify@security</span>
+                        <span class="prompt-separator">:</span>
+                        <span class="prompt-path">~/monitor</span>
+                        <span class="prompt-symbol">$</span>
+                    </div>
+                    <div class="event-log terminal-log" id="eventLog">
+                        <div class="log-entry">[1:06:03] تم تشغيل مختبر المحاكاة الأمنية</div>
+                    </div>
+                    <div class="terminal-input">
+                        <span class="prompt-symbol">$</span>
+                        <input type="text" placeholder="أدخل أمر المراقبة..." readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab Container -->
+            <div class="lab-container">
+
+                <!-- Attack Simulations Section -->
+                <div class="simulations-section attacks-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <span class="section-icon">⚔️</span>
+                            محاكاة الهجمات الأمنية
+                        </h3>
+                        <p class="section-description">محاكاة أنواع مختلفة من الهجمات السيبرانية</p>
+                    </div>
+                    <div class="simulations-grid attacks-grid">
+                        <!-- DDoS Attack -->
+                        <div class="simulation-card attack-card" id="ddosCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم DDoS</h3>
+                                    <span class="card-badge attack">هجوم</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجوم رفض الخدمة الموزع لاختبار قدرة الخوادم
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="ddosAttackers">عدد المهاجمين</label>
+                                        <input type="number" id="ddosAttackers" value="100" min="1" max="10000"
+                                            title="عدد البوتات المهاجمة">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="ddosRate">معدل الطلبات/ثانية</label>
+                                        <input type="number" id="ddosRate" value="1000" min="1" max="100000"
+                                            title="معدل الطلبات في الثانية">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="ddosTarget">الهدف</label>
+                                        <input type="text" id="ddosTarget" value="Web Server" placeholder="الهدف"
+                                            title="اسم أو عنوان الهدف">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="ddosRequests">0</span>
+                                        <span class="metric-label">الطلبات المرسلة</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="ddosResponse">0ms</span>
+                                        <span class="metric-label">زمن الاستجابة</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startDDoSAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopDDoSAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- DoS Attack -->
+                        <div class="simulation-card attack-card" id="dosCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم DoS</h3>
+                                    <span class="card-badge attack">هجوم</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجوم رفض الخدمة لاختبار استقرار الخوادم
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="dosType">نوع الهجوم</label>
+                                        <select id="dosType" title="اختر نوع هجوم DoS">
+                                            <option value="syn">SYN Flood</option>
+                                            <option value="udp">UDP Flood</option>
+                                            <option value="http">HTTP Flood</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="dosRate">معدل الحزم/ثانية</label>
+                                        <input type="number" id="dosRate" value="1000" min="1" max="100000"
+                                            title="معدل إرسال الحزم في الثانية">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="dosSize">حجم الحزمة</label>
+                                        <input type="number" id="dosSize" value="1024" min="64" max="65535"
+                                            title="حجم الحزمة بالبايت">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="dosPackets">0</span>
+                                        <span class="metric-label">الحزم المرسلة</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="dosBandwidth">0</span>
+                                        <span class="metric-label">عرض النطاق المستخدم</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startDoSAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopDoSAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Brute Force Attack -->
+                        <div class="simulation-card attack-card" id="bruteCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم القوة الغاشمة</h3>
+                                    <span class="card-badge attack">هجوم</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة محاولات كسر كلمات المرور بكثافة عالية
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="bruteUsername">اسم المستخدم</label>
+                                        <input type="text" id="bruteUsername" value="admin" placeholder="اسم المستخدم"
+                                            title="أدخل اسم المستخدم المستهدف">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="brutePasswordList">قائمة كلمات المرور</label>
+                                        <select id="brutePasswordList" title="اختر نوع قائمة كلمات المرور">
+                                            <option value="common">كلمات شائعة</option>
+                                            <option value="dictionary">قاموس</option>
+                                            <option value="custom">مخصص</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="bruteRate">معدل المحاولات/ثانية</label>
+                                        <input type="number" id="bruteRate" value="10" min="1" max="1000"
+                                            title="معدل محاولات كسر كلمة المرور">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="bruteAttempts">0</span>
+                                        <span class="metric-label">المحاولات</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="bruteCurrent">-</span>
+                                        <span class="metric-label">كلمة المرور الحالية</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startBruteAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopBruteAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Phishing Attack -->
+                        <div class="simulation-card attack-card" id="phishingCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم التصيد الاحتيالي</h3>
+                                    <span class="card-badge attack">هجوم</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة حملات التصيد الاحتيالي لاختبار وعي المستخدمين
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="phishingType">نوع التصيد</label>
+                                        <select id="phishingType" title="اختر نوع هجوم التصيد">
+                                            <option value="email">البريد الإلكتروني</option>
+                                            <option value="sms">الرسائل النصية</option>
+                                            <option value="social">وسائل التواصل</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="phishingTargets">عدد الأهداف</label>
+                                        <input type="number" id="phishingTargets" value="50" min="1" max="1000"
+                                            title="عدد المستخدمين المستهدفين">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="phishingTemplate">قالب الرسالة</label>
+                                        <select id="phishingTemplate" title="اختر قالب الرسالة">
+                                            <option value="bank">رسالة بنكية</option>
+                                            <option value="social">وسائل التواصل</option>
+                                            <option value="work">رسالة عمل</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="phishingSent">0</span>
+                                        <span class="metric-label">الرسائل المرسلة</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="phishingClicked">0</span>
+                                        <span class="metric-label">النقرات</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startPhishingAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopPhishingAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Man-in-the-Middle Attack -->
+                        <div class="simulation-card attack-card" id="mitmCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم الرجل في المنتصف</h3>
+                                    <span class="card-badge attack">هجوم</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجمات MITM لاعتراض الاتصالات
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="mitmProtocol">البروتوكول المستهدف</label>
+                                        <select id="mitmProtocol" title="اختر البروتوكول المستهدف">
+                                            <option value="http">HTTP</option>
+                                            <option value="https">HTTPS</option>
+                                            <option value="ftp">FTP</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="mitmTarget">الهدف</label>
+                                        <input type="text" id="mitmTarget" value="192.168.1.100"
+                                            placeholder="عنوان IP الهدف" title="أدخل عنوان IP الهدف">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="mitmDuration">مدة الهجوم (دقيقة)</label>
+                                        <input type="number" id="mitmDuration" value="5" min="1" max="60"
+                                            title="مدة الهجوم بالدقائق">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="mitmPackets">0</span>
+                                        <span class="metric-label">الحزم المعترضة</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="mitmData">0</span>
+                                        <span class="metric-label">البيانات المسربة</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startMITMAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopMITMAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vulnerability Simulations Section -->
+                <div class="simulations-section vulnerabilities-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <span class="section-icon">🔓</span>
+                            محاكاة الثغرات الأمنية
+                        </h3>
+                        <p class="section-description">محاكاة أنواع مختلفة من الثغرات الأمنية</p>
+                    </div>
+                    <div class="simulations-grid vulnerabilities-grid">
+                        <!-- SQL Injection Attack -->
+                        <div class="simulation-card vulnerability-card" id="sqlCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم حقن SQL</h3>
+                                    <span class="card-badge vulnerability">ثغرة</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجمات حقن قاعدة البيانات لاختبار الثغرات الأمنية
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="sqlDbType">نوع قاعدة البيانات</label>
+                                        <select id="sqlDbType" title="اختر نوع قاعدة البيانات">
+                                            <option value="mysql">MySQL</option>
+                                            <option value="postgresql">PostgreSQL</option>
+                                            <option value="oracle">Oracle</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="sqlAttackType">نوع الهجوم</label>
+                                        <select id="sqlAttackType" title="اختر نوع هجوم SQL Injection">
+                                            <option value="union">UNION-based</option>
+                                            <option value="boolean">Boolean-based</option>
+                                            <option value="time">Time-based</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="sqlTarget">الهدف</label>
+                                        <input type="text" id="sqlTarget" value="http://vulnerable-app.com/login"
+                                            placeholder="URL الهدف" title="أدخل رابط الهدف">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="sqlQueries">0</span>
+                                        <span class="metric-label">الاستعلامات المرسلة</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="sqlData">0</span>
+                                        <span class="metric-label">البيانات المستخرجة</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startSQLAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopSQLAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- XSS Attack -->
+                        <div class="simulation-card vulnerability-card" id="xssCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم XSS</h3>
+                                    <span class="card-badge vulnerability">ثغرة</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجمات Cross-Site Scripting لاختبار ثغرات الويب
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="xssType">نوع XSS</label>
+                                        <select id="xssType" title="اختر نوع هجوم XSS">
+                                            <option value="reflected">Reflected XSS</option>
+                                            <option value="stored">Stored XSS</option>
+                                            <option value="dom">DOM-based XSS</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="xssPayload">نص الهجوم</label>
+                                        <input type="text" id="xssPayload" value="<script>alert('XSS')</script>"
+                                            placeholder="Payload" title="أدخل نص الهجوم">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="xssTarget">الهدف</label>
+                                        <input type="text" id="xssTarget" value="http://vulnerable-app.com/search"
+                                            placeholder="URL الهدف" title="أدخل رابط الهدف">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="xssRequests">0</span>
+                                        <span class="metric-label">الطلبات المرسلة</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="xssVictims">0</span>
+                                        <span class="metric-label">الضحايا المحتملين</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startXSSAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopXSSAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- SSRF Attack -->
+                        <div class="simulation-card vulnerability-card" id="ssrfCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم SSRF</h3>
+                                    <span class="card-badge vulnerability">ثغرة</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجمات Server-Side Request Forgery لاختبار الثغرات الداخلية
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="ssrfType">نوع SSRF</label>
+                                        <select id="ssrfType" title="اختر نوع هجوم SSRF">
+                                            <option value="internal">Internal SSRF</option>
+                                            <option value="external">External SSRF</option>
+                                            <option value="blind">Blind SSRF</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="ssrfInternal">الهدف الداخلي</label>
+                                        <input type="text" id="ssrfInternal" value="http://localhost:8080/admin"
+                                            placeholder="الهدف الداخلي" title="أدخل عنوان الهدف الداخلي">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="ssrfExternal">الهدف الخارجي</label>
+                                        <input type="text" id="ssrfExternal" value="http://attacker.com/steal"
+                                            placeholder="الهدف الخارجي" title="أدخل عنوان الهدف الخارجي">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="ssrfRequests">0</span>
+                                        <span class="metric-label">الطلبات المرسلة</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="ssrfData">0</span>
+                                        <span class="metric-label">البيانات المسربة</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startSSRFAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopSSRFAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- CSRF Attack -->
+                        <div class="simulation-card vulnerability-card" id="csrfCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم CSRF</h3>
+                                    <span class="card-badge vulnerability">ثغرة</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجمات Cross-Site Request Forgery لاختبار الحماية
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="csrfMethod">نوع الطلب</label>
+                                        <select id="csrfMethod" title="اختر نوع طلب CSRF">
+                                            <option value="post">POST</option>
+                                            <option value="get">GET</option>
+                                            <option value="put">PUT</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="csrfAction">الإجراء المستهدف</label>
+                                        <select id="csrfAction" title="اختر الإجراء المستهدف">
+                                            <option value="transfer">تحويل أموال</option>
+                                            <option value="profile">تعديل الملف الشخصي</option>
+                                            <option value="password">تغيير كلمة المرور</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="csrfTarget">الهدف</label>
+                                        <input type="text" id="csrfTarget" value="http://bank.com/transfer"
+                                            placeholder="URL الهدف" title="أدخل رابط الهدف">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="csrfRequests">0</span>
+                                        <span class="metric-label">الطلبات المرسلة</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="csrfSuccess">0</span>
+                                        <span class="metric-label">الطلبات الناجحة</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startCSRFAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopCSRFAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Directory Traversal -->
+                        <div class="simulation-card vulnerability-card" id="dirTraversalCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم Directory Traversal</h3>
+                                    <span class="card-badge vulnerability">ثغرة</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجمات Directory Traversal للوصول للملفات الحساسة
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="dirTraversalOS">نظام التشغيل</label>
+                                        <select id="dirTraversalOS" title="اختر نظام التشغيل المستهدف">
+                                            <option value="linux">Linux/Unix</option>
+                                            <option value="windows">Windows</option>
+                                            <option value="mixed">مختلط</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="dirTraversalFile">الملف المستهدف</label>
+                                        <input type="text" id="dirTraversalFile" value="/etc/passwd"
+                                            placeholder="مسار الملف" title="أدخل مسار الملف المستهدف">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="dirTraversalDepth">عمق التنقل</label>
+                                        <input type="number" id="dirTraversalDepth" value="3" min="1" max="10"
+                                            title="عدد مستويات التنقل">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="dirTraversalAttempts">0</span>
+                                        <span class="metric-label">المحاولات</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="dirTraversalFiles">0</span>
+                                        <span class="metric-label">الملفات المستخرجة</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startDirTraversalAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopDirTraversalAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Command Injection -->
+                        <div class="simulation-card vulnerability-card" id="cmdInjectionCard">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="status-indicator stopped"></div>
+                                    <h3>هجوم Command Injection</h3>
+                                    <span class="card-badge vulnerability">ثغرة</span>
+                                </div>
+                            </div>
+                            <div class="card-description">
+                                محاكاة هجمات Command Injection لتنفيذ أوامر النظام
+                            </div>
+
+                            <div class="config-section">
+                                <h4>الإعدادات</h4>
+                                <div class="config-grid">
+                                    <div class="config-item">
+                                        <label for="cmdInjectionOS">نظام التشغيل</label>
+                                        <select id="cmdInjectionOS" title="اختر نظام التشغيل المستهدف">
+                                            <option value="linux">Linux</option>
+                                            <option value="windows">Windows</option>
+                                            <option value="unix">Unix</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="cmdInjectionCommand">الأمر المستهدف</label>
+                                        <input type="text" id="cmdInjectionCommand" value="ping"
+                                            placeholder="الأمر الأساسي" title="أدخل الأمر الأساسي">
+                                    </div>
+                                    <div class="config-item">
+                                        <label for="cmdInjectionPayload">Payload</label>
+                                        <input type="text" id="cmdInjectionPayload" value="; cat /etc/passwd"
+                                            placeholder="Payload" title="أدخل payload الهجوم">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-section">
+                                <h4>المقاييس</h4>
+                                <div class="metrics-grid">
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="cmdInjectionAttempts">0</span>
+                                        <span class="metric-label">المحاولات</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span class="metric-value" id="cmdInjectionOutput">0</span>
+                                        <span class="metric-label">مخرجات الأوامر</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-actions">
+                                <button class="btn-start" onclick="startCmdInjectionAttack()">
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                                    </svg>
+                                    بدء الهجوم
+                                </button>
+                                <button class="btn-stop" onclick="stopCmdInjectionAttack()" disabled>
+                                    <svg viewBox="0 0 24 24" width="16" height="16">
+                                        <path d="M6,6H18V18H6V6Z" fill="currentColor" />
+                                    </svg>
+                                    إيقاف
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/lab.js') }}"></script>
+</body>
+
+</html>

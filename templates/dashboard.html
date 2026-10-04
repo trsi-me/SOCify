@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>لوحة التحكم - SOCify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body class="dashboard-body">
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" width="32" height="32">
+                        <path d="M50 10 L80 30 L80 70 L50 90 L20 70 L20 30 Z" fill="none" stroke="#1565C0"
+                            stroke-width="3" />
+                        <circle cx="50" cy="50" r="15" fill="#00E5FF" />
+                        <circle cx="50" cy="50" r="8" fill="#1565C0" />
+                    </svg>
+                </div>
+                <span class="logo-text">SOCify</span>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <h1 class="dashboard-title">مركز عمليات الأمن السيبراني</h1>
+        </div>
+
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-info">
+                    <span class="user-name">{{ session.user_name }}</span>
+                    <span class="user-role">{{ session.user_role|getRoleName }}</span>
+                </div>
+                <div class="user-actions">
+                    <button class="btn btn-secondary" onclick="showProfile()">الملف الشخصي</button>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline">تسجيل الخروج</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M3,13H11V3H3M3,21H11V15H3M13,21H21V11H13M13,3V9H21V3" fill="currentColor" />
+                    </svg>
+                    <span>لوحة التحكم</span>
+                </a>
+                <a href="#events" class="nav-item" data-section="events">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>الأحداث الأمنية</span>
+                </a>
+                <a href="#rules" class="nav-item" data-section="rules">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>القواعد</span>
+                </a>
+                <a href="#sources" class="nav-item" data-section="sources">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>مصادر البيانات</span>
+                </a>
+                <a href="#lab" class="nav-item" data-section="lab" onclick="showLab()">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M19.43,12.98C19.47,12.66 19.5,12.34 19.5,12C19.5,11.66 19.47,11.34 19.43,11.02L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11.02C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.98M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>المختبر</span>
+                </a>
+                <a href="#profile" class="nav-item" data-section="profile" onclick="showProfile()">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>الملف الشخصي</span>
+                </a>
+                <a href="#audit" class="nav-item" data-section="audit">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>سجل التدقيق</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="section-header">
+                    <h2 class="section-title">لوحة التحكم الرئيسية</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="refreshDashboard()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path
+                                    d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"
+                                    fill="currentColor" />
+                            </svg>
+                            تحديث
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card critical">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="critical-count">0</div>
+                            <div class="stat-label">أحداث حرجة</div>
+                        </div>
+                    </div>
+                    <div class="stat-card high">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="high-count">0</div>
+                            <div class="stat-label">أحداث عالية</div>
+                        </div>
+                    </div>
+                    <div class="stat-card medium">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="medium-count">0</div>
+                            <div class="stat-label">أحداث متوسطة</div>
+                        </div>
+                    </div>
+                    <div class="stat-card low">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="low-count">0</div>
+                            <div class="stat-label">أحداث منخفضة</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">الأحداث الأخيرة</h3>
+                            <a href="#events" class="card-link">عرض الكل</a>
+                        </div>
+                        <div class="card-content">
+                            <div id="recent-events" class="events-list">
+                                <!-- Events will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">إحصائيات الحالة</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="status-stats" class="status-chart">
+                                <!-- Status stats will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Events Section -->
+            <section id="events-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">الأحداث الأمنية</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="showCreateEventModal()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor" />
+                            </svg>
+                            إضافة حدث
+                        </button>
+                        <button class="btn btn-secondary" onclick="refreshEvents()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path
+                                    d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"
+                                    fill="currentColor" />
+                            </svg>
+                            تحديث
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <label for="severity-filter" class="filter-label">الخطورة:</label>
+                        <select id="severity-filter" class="filter-select">
+                            <option value="">الكل</option>
+                            <option value="critical">حرج</option>
+                            <option value="high">عالي</option>
+                            <option value="medium">متوسط</option>
+                            <option value="low">منخفض</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="status-filter" class="filter-label">الحالة:</label>
+                        <select id="status-filter" class="filter-select">
+                            <option value="">الكل</option>
+                            <option value="open">مفتوح</option>
+                            <option value="investigating">قيد التحقيق</option>
+                            <option value="resolved">محلول</option>
+                            <option value="false_positive">إنذار كاذب</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="source-filter" class="filter-label">المصدر:</label>
+                        <select id="source-filter" class="filter-select">
+                            <option value="">الكل</option>
+                            <option value="firewall">جدار الحماية</option>
+                            <option value="ids">نظام كشف التسلل</option>
+                            <option value="server">الخادم</option>
+                            <option value="manual">يدوي</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="events-table-container">
+                    <table class="events-table">
+                        <thead>
+                            <tr>
+                                <th>معرف الحدث</th>
+                                <th>المصدر</th>
+                                <th>الخطورة</th>
+                                <th>الفئة</th>
+                                <th>العنوان</th>
+                                <th>الحالة</th>
+                                <th>التاريخ</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-table-body">
+                            <!-- Events will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Rules Section -->
+            <section id="rules-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">محرك القواعد</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="showCreateRuleModal()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor" />
+                            </svg>
+                            إضافة قاعدة
+                        </button>
+                    </div>
+                </div>
+
+                <div class="rules-grid" id="rules-grid">
+                    <!-- Rules will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Sources Section -->
+            <section id="sources-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">مصادر البيانات</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="addDataSource()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor" />
+                            </svg>
+                            إضافة مصدر
+                        </button>
+                        <button class="btn btn-secondary" onclick="refreshSources()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path
+                                    d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"
+                                    fill="currentColor" />
+                            </svg>
+                            تحديث
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sources-grid" id="sources-grid">
+                    <!-- Sources will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Lab Section -->
+            <section id="lab-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">المختبر</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="window.location.href='/lab'">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path d="M8,5.14V19.14L19,12.14L8,5.14Z" fill="currentColor" />
+                            </svg>
+                            فتح المختبر
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lab-preview">
+                    <div class="lab-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M12,2L13.09,8.26L22,9L13.09,9.74L12,16L10.91,9.74L2,9L10.91,8.26L12,2Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">الهجمات المتاحة</span>
+                                <span class="stat-value">5</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg viewBox="0 0 24 24" width="24" height="24">
+                                    <path
+                                        d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">الثغرات المتاحة</span>
+                                <span class="stat-value">6</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg viewBox="0 0 24 24" width="24" height="24">
+                                    <path
+                                        d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">المحاكاة النشطة</span>
+                                <span class="stat-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lab-features">
+                        <h3>المميزات المتاحة:</h3>
+                        <div class="features-grid">
+                            <div class="feature-category">
+                                <h4>⚔️ محاكاة الهجمات الأمنية</h4>
+                                <ul>
+                                    <li>هجوم DDoS (Distributed Denial of Service)</li>
+                                    <li>هجوم DoS (Denial of Service)</li>
+                                    <li>هجوم القوة الغاشمة (Brute Force)</li>
+                                    <li>هجوم التصيد الاحتيالي (Phishing)</li>
+                                    <li>هجوم الرجل في المنتصف (MITM)</li>
+                                </ul>
+                            </div>
+                            <div class="feature-category">
+                                <h4>🔓 محاكاة الثغرات الأمنية</h4>
+                                <ul>
+                                    <li>هجوم حقن SQL (SQL Injection)</li>
+                                    <li>هجوم XSS (Cross-Site Scripting)</li>
+                                    <li>هجوم SSRF (Server-Side Request Forgery)</li>
+                                    <li>هجوم CSRF (Cross-Site Request Forgery)</li>
+                                    <li>هجوم Directory Traversal</li>
+                                    <li>هجوم Command Injection</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="lab-additional-features">
+                            <h4>🎯 مميزات إضافية:</h4>
+                            <ul>
+                                <li>مراقبة في الوقت الفعلي مع واجهة تيرمينال</li>
+                                <li>تقارير مفصلة ومقاييس ديناميكية</li>
+                                <li>إعدادات قابلة للتخصيص لكل هجوم</li>
+                                <li>تصنيف الهجمات والثغرات بوضوح</li>
+                                <li>واجهة مستخدم متجاوبة وجذابة</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">الملف الشخصي</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" onclick="window.location.href='/profile'">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path
+                                    d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                                    fill="currentColor" />
+                            </svg>
+                            فتح الملف الشخصي
+                        </button>
+                    </div>
+                </div>
+
+                <div class="profile-preview">
+                    <div class="profile-info-card">
+                        <div class="profile-avatar">
+                            <svg viewBox="0 0 24 24" width="48" height="48">
+                                <path
+                                    d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="profile-details">
+                            <h3>{{ session.user_name }}</h3>
+                            <p>{{ session.user_role|getRoleName }}</p>
+                            <p>{{ session.user_email }}</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">الأحداث المعالجة</span>
+                            <span class="stat-value">127</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">القواعد المنشأة</span>
+                            <span class="stat-value">23</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">آخر تسجيل دخول</span>
+                            <span class="stat-value">اليوم</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Audit Section -->
+            <section id="audit-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">سجل التدقيق</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" onclick="refreshAudit()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path
+                                    d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"
+                                    fill="currentColor" />
+                            </svg>
+                            تحديث
+                        </button>
+                        <button class="btn btn-outline" onclick="exportAudit()">
+                            <svg viewBox="0 0 24 24" width="16" height="16">
+                                <path
+                                    d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+                                    fill="currentColor" />
+                            </svg>
+                            تصدير
+                        </button>
+                    </div>
+                </div>
+
+                <div class="audit-table-container">
+                    <table class="audit-table">
+                        <thead>
+                            <tr>
+                                <th>التاريخ والوقت</th>
+                                <th>المستخدم</th>
+                                <th>الإجراء</th>
+                                <th>المورد</th>
+                                <th>التفاصيل</th>
+                                <th>معلومات إضافية</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audit-table-body">
+                            <!-- Audit logs will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="createEventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">إضافة حدث أمني جديد</h3>
+                <button class="modal-close" onclick="closeModal('createEventModal')">&times;</button>
+            </div>
+            <form id="createEventForm" class="modal-form">
+                <div class="form-group">
+                    <label for="event-source" class="form-label">المصدر</label>
+                    <select id="event-source" name="source" class="form-input" required>
+                        <option value="">اختر المصدر</option>
+                        <option value="firewall">جدار الحماية</option>
+                        <option value="ids">نظام كشف التسلل</option>
+                        <option value="server">الخادم</option>
+                        <option value="manual">يدوي</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-severity" class="form-label">الخطورة</label>
+                    <select id="event-severity" name="severity" class="form-input" required>
+                        <option value="">اختر الخطورة</option>
+                        <option value="critical">حرج</option>
+                        <option value="high">عالي</option>
+                        <option value="medium">متوسط</option>
+                        <option value="low">منخفض</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-category" class="form-label">الفئة</label>
+                    <input type="text" id="event-category" name="category" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-title" class="form-label">العنوان</label>
+                    <input type="text" id="event-title" name="title" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-description" class="form-label">الوصف</label>
+                    <textarea id="event-description" name="description" class="form-input" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event-raw-data" class="form-label">البيانات الخام (اختياري)</label>
+                    <textarea id="event-raw-data" name="raw_data" class="form-input" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('createEventModal')">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إنشاء الحدث</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+
+</html>
