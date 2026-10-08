@@ -324,28 +324,28 @@ def add_sample_users():
     sample_users = [
         {
             'email': 'analyst1@socify.com',
-            'password': 'password123',
+            'password': '',
             'name': 'أحمد المحلل',
             'role': 'analyst',
             'team': 'فريق التحليل الأمني'
         },
         {
             'email': 'analyst2@socify.com',
-            'password': 'password123',
+            'password': '',
             'name': 'فاطمة الأمنية',
             'role': 'analyst',
             'team': 'فريق الاستجابة للحوادث'
         },
         {
             'email': 'manager@socify.com',
-            'password': 'password123',
+            'password': '',
             'name': 'محمد المدير',
             'role': 'soc_manager',
             'team': 'إدارة SOC'
         },
         {
             'email': 'admin@socify.com',
-            'password': 'password123',
+            'password': '',
             'name': 'سارة الإدارية',
             'role': 'admin',
             'team': 'إدارة النظام'
@@ -406,11 +406,11 @@ def main():
     print("\n" + "=" * 50)
     print("🎉 تم إكمال إضافة جميع البيانات التجريبية!")
     print("\n📋 بيانات تسجيل الدخول:")
-    print("👤 محلل: analyst1@socify.com / password123")
-    print("👤 محلل: analyst2@socify.com / password123")
-    print("👤 مدير: manager@socify.com / password123")
-    print("👤 إداري: admin@socify.com / password123")
-    print("👤 تجريبي: test@socify.com / password123")
+    print("👤 محلل: analyst1@socify.com / ")
+    print("👤 محلل: analyst2@socify.com / ")
+    print("👤 مدير: manager@socify.com / ")
+    print("👤 إداري: admin@socify.com / ")
+    print("👤 تجريبي: test@socify.com / ")
 
 if __name__ == '__main__':
     main()

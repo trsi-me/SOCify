@@ -29,9 +29,9 @@ def main():
     print("🌐 بدء تشغيل الخادم...")
     print("📍 العنوان: http://localhost:5000")
     print("🔑 بيانات الدخول:")
-    print("   مدير النظام: admin@socify.local / admin123")
-    print("   محلل أمني: analyst1@socify.local / password123")
-    print("   مدير SOC: manager@socify.local / password123")
+    print("   مدير النظام: admin@socify.local / ")
+    print("   محلل أمني: analyst1@socify.local / ")
+    print("   مدير SOC: manager@socify.local / ")
     print("\n⏹️  اضغط Ctrl+C لإيقاف الخادم")
     
     try:

@@ -125,7 +125,7 @@ def create_database():
     print("تم إنشاء الجداول بنجاح")
     
     # Insert default admin user
-    admin_password = bcrypt.hashpw('admin123'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    admin_password = bcrypt.hashpw(''.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     conn.execute('''
         INSERT INTO users (email, password_hash, name, role, team) 
         VALUES (?, ?, ?, ?, ?)
@@ -133,9 +133,9 @@ def create_database():
     
     # Insert sample users
     sample_users = [
-        ('analyst1@socify.local', 'password123', 'أحمد محمد', 'analyst', 'فريق التحليل الأمني'),
-        ('analyst2@socify.local', 'password123', 'فاطمة علي', 'analyst', 'فريق التحليل الأمني'),
-        ('manager@socify.local', 'password123', 'خالد السعد', 'soc_manager', 'إدارة SOC')
+        ('analyst1@socify.local', '', 'أحمد محمد', 'analyst', 'فريق التحليل الأمني'),
+        ('analyst2@socify.local', '', 'فاطمة علي', 'analyst', 'فريق التحليل الأمني'),
+        ('manager@socify.local', '', 'خالد السعد', 'soc_manager', 'إدارة SOC')
     ]
     
     for email, password, name, role, team in sample_users:
@@ -182,9 +182,9 @@ def create_database():
     
     print("✅ تم إنشاء قاعدة البيانات بنجاح!")
     print("\n🔑 بيانات الدخول الافتراضية:")
-    print("مدير النظام: admin@socify.local / admin123")
-    print("محلل أمني: analyst1@socify.local / password123")
-    print("مدير SOC: manager@socify.local / password123")
+    print("مدير النظام: admin@socify.local / ")
+    print("محلل أمني: analyst1@socify.local")
+    print("مدير SOC: manager@socify.local")
 
 if __name__ == '__main__':
     create_database()

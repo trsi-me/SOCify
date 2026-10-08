@@ -12,7 +12,7 @@ from functools import wraps
 import logging
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'socify-secret-key-change-in-production'
+app.config['SECRET_KEY'] = ''
 app.config['DATABASE'] = 'socify.db'
 
 # Initialize extensions

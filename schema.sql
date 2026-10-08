@@ -95,9 +95,9 @@ CREATE INDEX IF NOT EXISTS idx_events_source ON security_events(source);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_user ON audit_logs(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs(timestamp);
 
--- Insert default admin user (password: admin123)
+-- Insert default admin user (password: )
 INSERT OR IGNORE INTO users (email, password_hash, name, role, team) 
-VALUES ('admin@socify.local', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J5Kz8Kz8K', 'System Administrator', 'admin', 'IT Security');
+VALUES ('admin@socify.local', '', 'System Administrator', 'admin', 'IT Security');
 
 -- Insert sample event sources
 INSERT OR IGNORE INTO event_sources (name, type, endpoint, is_active) VALUES

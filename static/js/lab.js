@@ -519,11 +519,11 @@ function updateBruteMetrics() {
     // Different password lists based on selection
     let passwords = [];
     if (passwordList === 'common') {
-        passwords = ['password', '123456', 'admin', 'qwerty', 'letmein', 'welcome', 'monkey', 'dragon', 'password123', '123456789'];
+        passwords = ['password', '', 'admin', 'qwerty', 'letmein', 'welcome', 'monkey', 'dragon', '', '123456789'];
     } else if (passwordList === 'dictionary') {
         passwords = ['password', 'admin', 'root', 'user', 'test', 'guest', 'demo', 'sample', 'default', 'login'];
     } else {
-        passwords = ['admin123', 'password1', '12345', 'abc123', 'qwerty123', 'letmein123', 'welcome123'];
+        passwords = ['', 'password1', '12345', 'abc123', 'qwerty123', 'letmein123', 'welcome123'];
     }
 
     // Realistic brute force progression
